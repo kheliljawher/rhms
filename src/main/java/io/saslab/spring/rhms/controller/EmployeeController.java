@@ -36,20 +36,6 @@ public class EmployeeController {
     }
     )
 
-
-   /* @Transactional
-    public ResponseEntity<Object> addEmployee(Employee employee, int id) {
-
-        employeeService.saveEmployee(employee).ifPresentOrElse(emp -> { emp.(getEmployees).add(employee);
-            employeeRepository.save(employee);
-            }
-            ,
-                () -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found");
-                }
-                );
-        return ResponseEntity.accepted().body("Successfully Created Employee");
-    }*/
-
     public Employee addEmployee(@RequestBody Employee employee){
         return employeeService.saveEmployee(employee);
 

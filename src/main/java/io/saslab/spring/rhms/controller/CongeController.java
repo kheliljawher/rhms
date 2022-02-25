@@ -37,27 +37,13 @@ public class CongeController {
     }
     )
 
-
-   /* @Transactional
-    public ResponseEntity<Object> addConge(Conge conge, int id) {
-
-        congeService.saveConge(conge).ifPresentOrElse(emp -> { con.(getConges).add(conge);
-            congeRepository.save(conge);
-            }
-            ,
-                () -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Conge not found");
-                }
-                );
-        return ResponseEntity.accepted().body("Successfully Created Conge");
-    }*/
-
     public Conge addConge(@RequestBody Conge conge){
         return congeService.saveConge(conge);
 
     }
 
     @PostMapping("/addConges")
-    @ApiOperation(value = "Add all Conge", response = Iterable.class)
+    @ApiOperation(value = "Add all Conge", response = Conge.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved all employees"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
@@ -102,7 +88,7 @@ public class CongeController {
     @PutMapping("/update")
     @ApiOperation(value = "Update an conge information", response = Conge.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully updated employee information"),
+            @ApiResponse(code = 200, message = "Successfully updated cv information"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),

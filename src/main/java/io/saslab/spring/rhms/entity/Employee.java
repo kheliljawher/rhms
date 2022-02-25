@@ -3,6 +3,7 @@ package io.saslab.spring.rhms.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -33,4 +34,11 @@ public class Employee {
 
     @Column(name = "num_tel")
     private String num_tel;
+
+    @OneToMany (mappedBy = "employee")
+    private List<Conge> conges;
+
+    @OneToMany (mappedBy = "employee")
+    private List<Cv> cvs;
+
 }

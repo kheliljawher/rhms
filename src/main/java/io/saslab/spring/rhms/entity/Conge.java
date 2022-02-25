@@ -29,4 +29,7 @@ public class Conge {
 
     @Column(name = "Description")
     private String Description;
+
+    @ManyToOne
+    private Employee employee;
 }
