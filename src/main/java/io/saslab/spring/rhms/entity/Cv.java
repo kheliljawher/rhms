@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -22,4 +23,7 @@ public class Cv {
 
     @ManyToOne
     private Employee employee;
+
+    @OneToMany (mappedBy = "cv")
+    private List<Section> sections;
 }
