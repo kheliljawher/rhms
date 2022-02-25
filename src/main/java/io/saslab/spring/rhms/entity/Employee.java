@@ -41,4 +41,7 @@ public class Employee {
     @OneToMany (mappedBy = "employee")
     private List<Cv> cvs;
 
+    @ManyToOne
+    private Equipe equipe;
+
 }
