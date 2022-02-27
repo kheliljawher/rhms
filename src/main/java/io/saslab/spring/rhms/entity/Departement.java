@@ -23,4 +23,6 @@ public class Departement {
     @ManyToOne
     private Employee employee;
 
+    @ManyToOne
+    private Planning planning;
 }

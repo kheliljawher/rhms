@@ -23,4 +23,8 @@ public class Equipe {
 
     @OneToMany (mappedBy = "equipe")
     private List<Employee> employees;
+
+    @OneToMany (mappedBy = "equipe")
+    private List<Planning> plannings;
+
 }

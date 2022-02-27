@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -37,5 +38,11 @@ public class Planning {
 
     @ManyToOne
     private Employee employee;
+
+    @OneToMany (mappedBy = "planning")
+    private List<Departement> departements;
+
+    @ManyToOne
+    private Equipe equipe;
 
 }
