@@ -44,4 +44,7 @@ public class Employee {
     @ManyToOne
     private Equipe equipe;
 
+    @OneToMany (mappedBy = "employee")
+    private List<Planning> plannings;
+
 }
