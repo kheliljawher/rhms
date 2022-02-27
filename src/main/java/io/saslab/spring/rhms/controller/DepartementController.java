@@ -94,8 +94,8 @@ public class DepartementController {
             @ApiResponse(code = 500, message = "Application failed to process the request")
     }
     )
-    public Departement findByDepartementByNom(String nom_dep){
-        return departementService.getDepartementByNom(nom_dep);
+    public Departement findDepartementByNom(String nom){
+        return departementService.getDepartementByNom(nom);
     }
 
     @PutMapping("/update")

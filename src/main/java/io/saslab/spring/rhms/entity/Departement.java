@@ -17,8 +17,8 @@ public class Departement {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(name = "nom_dep")
-    private String nom_dep;
+    @Column(name = "nom")
+    private String nom;
 
     @ManyToOne
     private Employee employee;

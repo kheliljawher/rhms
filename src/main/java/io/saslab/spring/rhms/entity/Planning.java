@@ -17,8 +17,8 @@ public class Planning {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(name = "nom_Plan")
-    private String nom_Plan;
+    @Column(name = "nom")
+    private String nom;
 
     @Column(name = "plan_Jour")
     private Date plan_Jour;

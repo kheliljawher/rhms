@@ -27,8 +27,8 @@ public class PlanningService {
     public Planning getPlanningById(Integer id){
         return planningRepository.findById(id).orElse(null);
     }
-    public Planning getPlanningByNomPlan(String nom_Plan){
-        return planningRepository.findByNomPlan(nom_Plan);
+    public Planning getPlanningByNom(String nom){
+        return planningRepository.findByNom(nom);
     }
     public String deletePlanningById(int id){
         planningRepository.deleteById(id);
@@ -36,9 +36,8 @@ public class PlanningService {
     }
     public Planning updatePlanning(Planning planning){
         Planning existingPlanning=planningRepository.findById(planning.getId()).orElse(null);
-        existingPlanning.setNom_Plan(planning.getNom_Plan());
+        existingPlanning.setNom(planning.getNom());
         return planningRepository.save(existingPlanning);
     }
-
 
 }

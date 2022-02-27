@@ -27,8 +27,8 @@ public class DepartementService {
     public Departement getDepartementById(Integer id){
         return departementRepository.findById(id).orElse(null);
     }
-    public Departement getDepartementByNom(String nom_dep){
-        return departementRepository.findByNomDep(nom_dep);
+    public Departement getDepartementByNom(String nom){
+        return departementRepository.findByNom(nom);
     }
     public String deleteDepartementById(int id){
         departementRepository.deleteById(id);
@@ -36,7 +36,7 @@ public class DepartementService {
     }
     public Departement updateDepartement(Departement departement){
         Departement existingDepartement=departementRepository.findById(departement.getId()).orElse(null);
-        existingDepartement.setNom_dep(departement.getNom_dep());
+        existingDepartement.setNom(departement.getNom());
         return departementRepository.save(existingDepartement);
     }
 

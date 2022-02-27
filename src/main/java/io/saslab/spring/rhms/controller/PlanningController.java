@@ -93,8 +93,8 @@ public class PlanningController {
             @ApiResponse(code = 500, message = "Application failed to process the request")
     }
     )
-    public Planning findPlanningByNomPlan(String nom_Plan){
-        return planningService.getPlanningByNomPlan(nom_Plan);
+    public Planning findPlanningByNom(String nom){
+        return planningService.getPlanningByNom(nom);
     }
 
     @PutMapping("/update")
