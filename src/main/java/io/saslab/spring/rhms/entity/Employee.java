@@ -47,4 +47,7 @@ public class Employee {
     @OneToMany (mappedBy = "employee")
     private List<Planning> plannings;
 
+    @OneToMany (mappedBy = "departement")
+    private List<Departement> departements;
+
 }

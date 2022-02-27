@@ -126,8 +126,8 @@ public class PlanningController {
 
     public void deletePlanningById(int id)  {
 
-        Planning emp= planningRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Planning not found"));
-        planningRepository.delete(emp);
+        Planning plan= planningRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Planning not found"));
+        planningRepository.delete(plan);
 
     }
 
