@@ -7,6 +7,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,31 +23,43 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/employees")
-@Api(produces = "application/json", value = "employee v1 service in the application")
+@Tag(name = "Employee", description = "CRUD employee")
 public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
     private EmployeeRepository employeeRepository;
 
-    @PostMapping("/addEmployee")
-    @ApiOperation(value = "Create a new employee", response = Employee.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully created a new employee"),
-            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
-            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
-            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
-            @ApiResponse(code = 500, message = "Application failed to process the request")
+
+    @GetMapping("/")
+
+    public String getMessage() {
+        return "Employee controller ...";
     }
+
+
+    @PutMapping("/addEmployee/{id}")
+    @Operation(
+            summary = "Add an employee",
+            description = "Create a new employee.",
+            tags = { "Employee" },
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Employee.class))
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(description = "Not found", responseCode = "404", content = @Content),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
+            }
     )
 
-    public Employee addEmployee(@RequestBody Employee employee){
-        return employeeService.saveEmployee(employee);
-
+    public ResponseEntity<Object> addEmployee(@RequestBody Employee emp, @PathVariable("id")  @Parameter(description = "The Id of the employee") int id) {
+        return  employeeService.addEmployee(emp, id);
     }
 
     @PostMapping("/addEmployees")
-    @ApiOperation(value = "Add all employees", response = Iterable.class)
+    @ApiOperation(value = "Add all employees", response = Employee.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved all employees"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
@@ -52,7 +69,7 @@ public class EmployeeController {
     }
     )
     public List<Employee> addEmployees(@RequestBody List<Employee> employees){
-        return employeeService.saveEmployees(employees);
+        return employeeService.addEmployees(employees);
 
     }
 
@@ -112,18 +129,23 @@ public class EmployeeController {
         return employeeService.getEmployeeByPrenom(prenom);
     }
 
-    @PutMapping("/update")
-    @ApiOperation(value = "Update an employee information", response = Employee.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully updated employee information"),
-            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
-            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
-            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
-            @ApiResponse(code = 500, message = "Application failed to process the request")
-    }
+    @PutMapping("/updateEmployee/{id}")
+    @Operation(
+            summary = "Update an employee",
+            description = "Update an existing employee.",
+            tags = { "Employee" },
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Employee.class))
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(description = "Not found", responseCode = "404", content = @Content),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
+            }
     )
-    public Employee updateEmployee (@RequestBody Employee employee){
-        return employeeService.updateEmployee(employee);
+    public ResponseEntity<Object> updateEmployee (@RequestBody Employee employee, @PathVariable @Parameter(description = "The reference of the article to update.") int id){
+        return employeeService.updateEmployee(id,employee);
     }
 
     @DeleteMapping("/delete/{id}")

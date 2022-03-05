@@ -1,8 +1,10 @@
 package io.saslab.spring.rhms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -12,9 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name ="equipe")
-public class Equipe {
+public class Equipe implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "nom")
@@ -22,6 +27,7 @@ public class Equipe {
 
 
     @OneToMany (mappedBy = "equipe")
+    @JsonIgnore
     private List<Employee> employees;
 
     @OneToMany (mappedBy = "equipe")

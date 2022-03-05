@@ -3,6 +3,7 @@ package io.saslab.spring.rhms.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -12,9 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name ="employee")
-public class Employee {
+public class Employee  implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "nom")
@@ -42,6 +46,7 @@ public class Employee {
     private List<Cv> cvs;
 
     @ManyToOne
+   // @JoinColumn(name="idequipe", nullable=false)
     private Equipe equipe;
 
     @OneToMany (mappedBy = "employee")
