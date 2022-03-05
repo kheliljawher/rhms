@@ -16,7 +16,7 @@ import java.util.Date;
 public class Conge {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private Long id;
 
     @Column(name = "date_debut")
     private Date date_debut;

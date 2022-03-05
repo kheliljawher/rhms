@@ -1,35 +1,44 @@
 package io.saslab.spring.rhms.controller;
 
 import io.saslab.spring.rhms.entity.Conge;
+import io.saslab.spring.rhms.entity.Employee;
 import io.saslab.spring.rhms.repository.CongeRepository;
 import io.saslab.spring.rhms.service.CongeService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/v1/conges")
-@Api(produces = "application/json", value = "conge v1 service in the application")
+@RequestMapping(value = "/api/v1/conge")
+@Tag(name = "Conge", description = "CRUD Conge")
 public class CongeController {
-
 
     @Autowired
     private CongeService congeService;
     private CongeRepository congeRepository;
 
-    @PostMapping("/addConge")
-    @ApiOperation(value = "Create a new Conge", response = Conge.class)
+
+    @GetMapping("/")
+
+    public String getMessage() {
+        return "conge controller ...";
+    }
+
+
+    @PostMapping("/conges/{id}")
+    @ApiOperation(value = "Add an conge", response = Conge.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully created Conge"),
+            @ApiResponse(code = 200, message = "Successfully add an conges"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
@@ -37,30 +46,29 @@ public class CongeController {
     }
     )
 
-    public Conge addConge(@RequestBody Conge conge){
-        return congeService.saveConge(conge);
-
-    }
-
-    @PostMapping("/addConges")
-    @ApiOperation(value = "Add all Conge", response = Conge.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved all employees"),
-            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
-            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
-            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
-            @ApiResponse(code = 500, message = "Application failed to process the request")
-    }
-    )
-    public List<Conge> addConges(@RequestBody List<Conge> conges){
-        return congeService.saveConges(conges);
-
+    public ResponseEntity<Conge> addConge(@RequestBody Conge con) {
+        return  ResponseEntity.ok( congeService.addConge(con));
     }
 
     @PostMapping("/conges")
-    @ApiOperation(value = "View all conge", response = Conge.class)
+    @ApiOperation(value = "Add all conges", response = Conge.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved all conge"),
+            @ApiResponse(code = 200, message = "Successfully retrieved all conges"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
+            @ApiResponse(code = 500, message = "Application failed to process the request")
+    }
+    )
+    public Conge addConges(@RequestBody Conge conges){
+        return congeService.addConge(conges);
+
+    }
+
+    @GetMapping("/conges")
+    @ApiOperation(value = "View all conges", response = Conge.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved all conges"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
@@ -71,7 +79,7 @@ public class CongeController {
         return congeService.getConges();
     }
 
-    @PostMapping("/conge/{id}")
+    @GetMapping("/conges/{id}")
     @ApiOperation(value = "View conge by id", response = Conge.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved all conge by id"),
@@ -81,25 +89,27 @@ public class CongeController {
             @ApiResponse(code = 500, message = "Application failed to process the request")
     }
     )
-    public Conge findCongeById(int id){
-        return congeService.getCongeById(id);
-    }
 
-    @PutMapping("/update")
-    @ApiOperation(value = "Update an conge information", response = Conge.class)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully updated cv information"),
-            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
-            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
-            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
-            @ApiResponse(code = 500, message = "Application failed to process the request")
-    }
+    @PutMapping("/conges/{id}")
+    @Operation(
+            summary = "Update an conge",
+            description = "Update an existing conge.",
+            tags = { "Conge" },
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            description = "Success",
+                            responseCode = "200",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Conge.class))
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(description = "Not found", responseCode = "404", content = @Content),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
+            }
     )
-    public Conge updateConge (@RequestBody Conge conge){
-        return congeService.updateConge(conge);
+    public ResponseEntity<Object> updateConge (@RequestBody Conge conge, @PathVariable @Parameter(description = "The reference of the article to update.") int id){
+        return congeService.updateConge(id,conge);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/conges/{id}")
     @ApiOperation(value = "Deletes specific conge with the supplied conge id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deletes the specific conge"),
@@ -110,12 +120,9 @@ public class CongeController {
     }
     )
 
-    @Transactional
+    public void deleteCongeById(@PathVariable @Parameter(description = "The reference of the conge to delete.")long id)  {
 
-    public void deleteCongeById(int id)  {
-
-        Conge con= congeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Conge not found"));
-        congeRepository.delete(con);
+        congeService.deleteCongeById(id);
 
     }
 

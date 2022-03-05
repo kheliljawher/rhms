@@ -15,7 +15,7 @@ public class Contrat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private Long id;
 
     @Column(name = "type")
     private String type;

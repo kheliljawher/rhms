@@ -11,23 +11,16 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.transaction.Transactional;
 import java.util.List;
 
+@Transactional
 @Service
 public class EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    @Transactional
-    public ResponseEntity<Object> addEmployee(Employee employee, int id) {
+    public Employee addEmployee(Employee employee) {
+        return employeeRepository.save(employee);
 
-        employeeRepository
-                .findById(id)
-                .ifPresentOrElse(emp -> {
-                    employeeRepository.save(employee);
-                },() -> { throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found");
-                });
-
-        return ResponseEntity.accepted().body("Successfully Created Employee");
 
     }
 
@@ -39,7 +32,7 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Employee getEmployeeById(Integer id) {
+    public Employee getEmployeeById(Long id) {
         return employeeRepository.findById(id).orElse(null);
     }
 
@@ -51,8 +44,7 @@ public class EmployeeService {
         return employeeRepository.findByPrenom(prenom);
     }
 
-    @Transactional
-    public void deleteEmployeeById(int id) {
+    public void deleteEmployeeById(long id) {
 
         Employee emp =
                 employeeRepository
@@ -61,8 +53,7 @@ public class EmployeeService {
         employeeRepository.delete(emp);
     }
 
-    @Transactional
-    public ResponseEntity<Object> updateEmployee(int id, Employee employee) {
+    public ResponseEntity<Object> updateEmployee(long id, Employee employee) {
 
         employeeRepository
                 .findById(id)
