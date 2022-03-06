@@ -1,35 +1,40 @@
 package io.saslab.spring.rhms.controller;
 
-
 import io.saslab.spring.rhms.entity.Poste;
 import io.saslab.spring.rhms.repository.PosteRepository;
 import io.saslab.spring.rhms.service.PosteService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/postes")
-@Api(produces = "application/json", value = "poste v1 service in the application")
+@Tag(name = "Poste", description = "CRUD poste")
 public class PosteController {
-
 
     @Autowired
     private PosteService posteService;
     private PosteRepository posteRepository;
 
-    @PostMapping("/addPoste")
-    @ApiOperation(value = "Create a new poste", response = Poste.class)
+
+    @GetMapping("/")
+
+    public String getMessage() {
+        return "Poste controller ...";
+    }
+
+
+    @PostMapping("/postes/{id}")
+    @ApiOperation(value = "Add an postes", response = Poste.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully created a new poste"),
+            @ApiResponse(code = 200, message = "Successfully add an postes"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
@@ -37,13 +42,12 @@ public class PosteController {
     }
     )
 
-    public Poste addPoste(@RequestBody Poste poste){
-        return posteService.savePoste(poste);
-
+    public ResponseEntity<Poste> addPoste(@RequestBody Poste pst) {
+        return  ResponseEntity.ok( posteService.addPoste(pst));
     }
 
-    @PostMapping("/addPostes")
-    @ApiOperation(value = "Add all postes", response = Iterable.class)
+    @PostMapping("/postes")
+    @ApiOperation(value = "Add all postes", response = Poste.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved all postes"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
@@ -52,12 +56,12 @@ public class PosteController {
             @ApiResponse(code = 500, message = "Application failed to process the request")
     }
     )
-    public List<Poste> addPostes(@RequestBody List<Poste> postes){
-        return posteService.savePostes(postes);
+    public Poste addPostes(@RequestBody Poste postes){
+        return posteService.addPoste(postes);
 
     }
 
-    @PostMapping("/postes")
+    @GetMapping("/postes")
     @ApiOperation(value = "View all postes", response = Poste.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved all postes"),
@@ -67,28 +71,28 @@ public class PosteController {
             @ApiResponse(code = 500, message = "Application failed to process the request")
     }
     )
-    public List<Poste> findAllPostes(){
+    public List<Poste> findAllpostes(){
         return posteService.getPostes();
     }
 
-    @PostMapping("/poste/{id}")
+    @GetMapping("/postes/{id}")
     @ApiOperation(value = "View poste by id", response = Poste.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved all Poste by id"),
+            @ApiResponse(code = 200, message = "Successfully retrieved all poste by id"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
             @ApiResponse(code = 500, message = "Application failed to process the request")
     }
     )
-    public Poste findPosteById(int id){
+    public Poste findPosteById(@PathVariable long id){
         return posteService.getPosteById(id);
     }
 
-    @PostMapping("/poste/{nom}")
+    @GetMapping("/postes/nom/{nom}")
     @ApiOperation(value = "View poste by nom", response = Poste.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved poste by nom"),
+            @ApiResponse(code = 200, message = "Successfully retrieved Poste by nom"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
@@ -99,21 +103,21 @@ public class PosteController {
         return posteService.getPosteByNom(nom);
     }
 
-    @PutMapping("/update")
-    @ApiOperation(value = "Update an poste information", response = Poste.class)
+    @PutMapping("/postes/{id}")
+    @ApiOperation(value = "update an existing postes", response = Poste.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully updated poste information"),
+            @ApiResponse(code = 200, message = "Successfully update an postes"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
             @ApiResponse(code = 500, message = "Application failed to process the request")
     }
     )
-    public Poste updatePoste (@RequestBody Poste poste){
-        return posteService.updatePoste(poste);
+    public ResponseEntity<Object> updatePoste (@RequestBody Poste poste, @PathVariable @Parameter(description = "The reference of the article to update.") int id){
+        return posteService.updatePoste(id,poste);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/postes/{id}")
     @ApiOperation(value = "Deletes specific poste with the supplied poste id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deletes the specific poste"),
@@ -124,12 +128,9 @@ public class PosteController {
     }
     )
 
-    @Transactional
+    public void deletePosteById(@PathVariable @Parameter(description = "The reference of the poste to delete.")long id)  {
 
-    public void deletePosteById(int id)  {
-
-        Poste emp= posteRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Poste not found"));
-        posteRepository.delete(emp);
+        posteService.deletePosteById(id);
 
     }
 

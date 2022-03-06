@@ -38,21 +38,21 @@ public class CongeService {
 
     public void deleteCongeById(long id) {
 
-        Conge emp =
+        Conge cong =
                 congeRepository
                         .findById(id)
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Conge not found"));
-        congeRepository.delete(emp);
+        congeRepository.delete(cong);
     }
 
     public ResponseEntity<Object> updateConge(long id, Conge conge) {
 
         congeRepository
                 .findById(id)
-                .ifPresentOrElse(con -> {
-                    con.setDate_debut(conge.getDate_debut());
-                    con.setDate_fin(conge.getDate_fin());
-                    congeRepository.save(con);
+                .ifPresentOrElse(cong -> {
+                    cong.setDate_debut(conge.getDate_debut());
+                    cong.setDate_fin(conge.getDate_fin());
+                    congeRepository.save(cong);
                 }, () -> {
                     throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Conge not found");
                 });

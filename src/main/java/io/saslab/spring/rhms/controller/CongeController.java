@@ -1,7 +1,6 @@
 package io.saslab.spring.rhms.controller;
 
 import io.saslab.spring.rhms.entity.Conge;
-import io.saslab.spring.rhms.entity.Employee;
 import io.saslab.spring.rhms.repository.CongeRepository;
 import io.saslab.spring.rhms.service.CongeService;
 import io.swagger.annotations.ApiOperation;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/v1/conge")
+@RequestMapping(value = "/api/v1/conges")
 @Tag(name = "Conge", description = "CRUD Conge")
 public class CongeController {
 

@@ -14,8 +14,8 @@ import javax.persistence.*;
 public class Poste {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "nom")
     private String nom;

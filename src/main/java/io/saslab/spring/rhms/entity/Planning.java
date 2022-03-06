@@ -15,8 +15,8 @@ import java.util.List;
 @Table(name ="planning")
 public class Planning {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "nom")
     private String nom;

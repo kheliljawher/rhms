@@ -3,39 +3,66 @@ package io.saslab.spring.rhms.service;
 import io.saslab.spring.rhms.entity.Poste;
 import io.saslab.spring.rhms.repository.PosteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Transactional
 @Service
 public class PosteService {
 
     @Autowired
     private PosteRepository posteRepository;
 
-    public Poste savePoste(Poste poste){
+    public Poste addPoste(Poste poste) {
         return posteRepository.save(poste);
+
+
     }
-    public List<Poste> savePostes(List<Poste> poste){
+
+    public List<Poste> addPostes(List<Poste> poste) {
         return posteRepository.saveAll(poste);
     }
-    public List<Poste> getPostes(){
+
+    public List<Poste> getPostes() {
         return posteRepository.findAll();
     }
-    public Poste getPosteById(Integer id){
+
+    public Poste getPosteById(Long id) {
         return posteRepository.findById(id).orElse(null);
     }
-    public Poste getPosteByNom(String nom){
+
+    public Poste getPosteByNom(String nom) {
         return posteRepository.findByNom(nom);
     }
-    public String deletePosteById(int id){
-        posteRepository.deleteById(id);
-        return "poste removed !"+id;
+
+    public void deletePosteById(long id) {
+
+        Poste pst =
+                posteRepository
+                        .findById(id)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Poste not found"));
+        posteRepository.delete(pst);
     }
-    public Poste updatePoste(Poste poste){
-        Poste existingPoste=posteRepository.findById(poste.getId()).orElse(null);
-        existingPoste.setNom(poste.getNom());
-        return posteRepository.save(existingPoste);
+
+    public ResponseEntity<Object> updatePoste(long id, Poste poste) {
+
+        posteRepository
+                .findById(id)
+                .ifPresentOrElse(pst -> {
+                    pst.setNom(poste.getNom());
+                    posteRepository.save(pst);
+                }, () -> {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poste not found");
+                });
+
+
+        return ResponseEntity.accepted().body("Successfully updated Poste");
+
     }
 
 

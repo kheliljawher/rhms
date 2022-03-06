@@ -43,21 +43,21 @@ public class ContratService {
 
     public void deleteContratById(long id) {
 
-        Contrat emp =
+        Contrat cont =
                 contratRepository
                         .findById(id)
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "contrat not found"));
-        contratRepository.delete(emp);
+        contratRepository.delete(cont);
     }
 
     public ResponseEntity<Object> updatecontrat(long id, Contrat contrat) {
 
         contratRepository
                 .findById(id)
-                .ifPresentOrElse(con -> {
-                    con.setDate_debut(contrat.getDate_debut());
-                    con.setDate_fin(contrat.getDate_fin());
-                    contratRepository.save(con);
+                .ifPresentOrElse(cont -> {
+                    cont.setDate_debut(contrat.getDate_debut());
+                    cont.setDate_fin(contrat.getDate_fin());
+                    contratRepository.save(cont);
                 }, () -> {
                     throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Contrat not found");
                 });

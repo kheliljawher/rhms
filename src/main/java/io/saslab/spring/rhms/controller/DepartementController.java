@@ -3,32 +3,38 @@ package io.saslab.spring.rhms.controller;
 import io.saslab.spring.rhms.entity.Departement;
 import io.saslab.spring.rhms.repository.DepartementRepository;
 import io.saslab.spring.rhms.service.DepartementService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/departements")
-@Api(produces = "application/json", value = "departement v1 service in the application")
-
+@Tag(name = "Departement", description = "CRUD departement")
 public class DepartementController {
 
     @Autowired
     private DepartementService departementService;
     private DepartementRepository departementRepository;
 
-    @PostMapping("/addDepartement")
-    @ApiOperation(value = "Create a new departement", response = Departement.class)
+
+    @GetMapping("/")
+
+    public String getMessage() {
+        return "Departement controller ...";
+    }
+
+
+    @PostMapping("/departements/{id}")
+    @ApiOperation(value = "Add an departements", response = Departement.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully created a new departement"),
+            @ApiResponse(code = 200, message = "Successfully add an departements"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
@@ -36,13 +42,12 @@ public class DepartementController {
     }
     )
 
-    public Departement addDepartement(@RequestBody Departement departement){
-        return departementService.saveDepartement(departement);
-
+    public ResponseEntity<Departement> addDepartement(@RequestBody Departement dep) {
+        return  ResponseEntity.ok( departementService.addDepartement(dep));
     }
 
-    @PostMapping("/addDepartements")
-    @ApiOperation(value = "Add all departements", response = Iterable.class)
+    @PostMapping("/departements")
+    @ApiOperation(value = "Add all departements", response = Departement.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved all departements"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
@@ -51,12 +56,12 @@ public class DepartementController {
             @ApiResponse(code = 500, message = "Application failed to process the request")
     }
     )
-    public List<Departement> addDepartements(@RequestBody List<Departement> departements){
-        return departementService.saveDepartements(departements);
+    public Departement addDepartements(@RequestBody Departement departements){
+        return departementService.addDepartement(departements);
 
     }
 
-    @PostMapping("/departements")
+    @GetMapping("/departements")
     @ApiOperation(value = "View all departements", response = Departement.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved all departements"),
@@ -70,7 +75,7 @@ public class DepartementController {
         return departementService.getDepartements();
     }
 
-    @PostMapping("/departement/{id}")
+    @GetMapping("/departements/{id}")
     @ApiOperation(value = "View departement by id", response = Departement.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved all departement by id"),
@@ -80,11 +85,11 @@ public class DepartementController {
             @ApiResponse(code = 500, message = "Application failed to process the request")
     }
     )
-    public Departement findDepartementById(int id){
+    public Departement findDepartementById(@PathVariable long id){
         return departementService.getDepartementById(id);
     }
 
-    @PostMapping("/departement/{nom}")
+    @GetMapping("/departements/nom/{nom}")
     @ApiOperation(value = "View departement by nom", response = Departement.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved departement by nom"),
@@ -94,25 +99,25 @@ public class DepartementController {
             @ApiResponse(code = 500, message = "Application failed to process the request")
     }
     )
-    public Departement findDepartementByNom(String nom){
+    public Departement findDepartementBynom(String nom){
         return departementService.getDepartementByNom(nom);
     }
 
-    @PutMapping("/update")
-    @ApiOperation(value = "Update an departement information", response = Departement.class)
+    @PutMapping("/departements/{id}")
+    @ApiOperation(value = "update an existing departements", response = Departement.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully updated departement information"),
+            @ApiResponse(code = 200, message = "Successfully update an departements"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
             @ApiResponse(code = 500, message = "Application failed to process the request")
     }
     )
-    public Departement updateDepartement (@RequestBody Departement departement){
-        return departementService.updateDepartement(departement);
+    public ResponseEntity<Object> updateDepartement (@RequestBody Departement departement, @PathVariable @Parameter(description = "The reference of the article to update.") int id){
+        return departementService.updateDepartement(id,departement);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/departements/{id}")
     @ApiOperation(value = "Deletes specific departement with the supplied departement id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deletes the specific departement"),
@@ -123,14 +128,10 @@ public class DepartementController {
     }
     )
 
-    @Transactional
+    public void deleteDepartementById(@PathVariable @Parameter(description = "The reference of the departement to delete.")long id)  {
 
-    public void deleteDepartementById(int id)  {
-
-        Departement dep= departementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Departement not found"));
-        departementRepository.delete(dep);
+        departementService.deleteDepartementById(id);
 
     }
-
 
 }

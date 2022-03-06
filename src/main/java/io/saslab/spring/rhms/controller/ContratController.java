@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/v1/contrat")
+@RequestMapping(value = "/api/v1/contrats")
 @Tag(name = "Contrat", description = "CRUD contrat")
 public class ContratController {
 
